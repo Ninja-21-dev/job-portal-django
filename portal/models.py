@@ -2,7 +2,7 @@ from django.db import models
 
 from PIL import Image
 
-from users.models import JobSeeker
+from users.models import JobSeeker, User
 
 
 class Category(models.Model):
@@ -13,7 +13,7 @@ class Category(models.Model):
 
 
 class Company(models.Model):
-    employer = models.OneToOneField(JobSeeker, on_delete=models.CASCADE, default=False)
+    employer = models.OneToOneField(User, on_delete=models.CASCADE)
     category = models.OneToOneField(Category, on_delete=models.CASCADE)
     name = models.CharField(max_length=80)
     co_introduction = models.TextField()
@@ -30,7 +30,7 @@ class Job(models.Model):
     title = models.CharField(max_length=80)
     location = models.CharField(max_length=80)
     experience_choices = (
-        ('not-matter','مهم نیست'),
+        ('no-matter','مهم نیست'),
         ('1-3', 'یک تا ۳ سال'),
         ('3-6', 'سه تا ۶ سال'),
         ('+6', 'بیشتر از ۶ سال'),
@@ -44,13 +44,23 @@ class Job(models.Model):
         ('internship', 'کار آموزی'),
     )
     cooperation_type = models.CharField(
-        max_length=80,
-        choices=cooperation_choices
+        max_length=80, choices=cooperation_choices
     )
     job_description = models.TextField()
     skills_required = models.CharField(max_length=80)
-    military_service = models.CharField(max_length=80)
-    degree = models.CharField(max_length=80)
+    military_choices = (
+        ('no-matter', 'مهم نیست'),
+        ('end', 'پایان خدمت'),
+    )
+    military_service = models.CharField(
+        max_length=80, choices=military_choices
+    )
+    degree_choices = (
+        ('no-matter', 'مهم نیست'),
+        ('diploma', 'دیپلم'),
+        ('bachelor', 'لیسانس'),
+    )
+    degree = models.CharField(max_length=80, choices=degree_choices)
     gender_choices = (
         ('Male', 'مرد'),
         ('Female', 'زن'),
