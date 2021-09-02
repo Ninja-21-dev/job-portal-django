@@ -1,21 +1,50 @@
 
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth.models import User
 
+from users.models import User
 
 class UserRegisterForm(UserCreationForm):
-    email = forms.EmailField()
-
+    full_name = forms.CharField(
+        label='نام و نام خانوادگی',
+        widget=forms.TextInput(
+           attrs={'placeholder': 'مثلا: علی محمدی',}
+           )
+        )
+    email = forms.EmailField(
+        label='آدرس ایمیل',
+        widget=forms.TextInput(
+           attrs={'placeholder': 'آدرس ایمیل خود را وارد کنید'}
+            )
+        )
+    password1 = forms.CharField(
+        label='رمز عبور',
+        widget=forms.PasswordInput(
+            attrs={'placeholder': 'رمز عبور خود را وارد کنید'}
+            )
+        )
+    password2 = forms.CharField(
+        label='تکرار رمز عبور',
+        widget=forms.PasswordInput(
+            attrs={'placeholder': 'رمز عبور خود راتکرار کنید'}
+            )
+        )
+    
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2']
-
+        fields = ['full_name', 'email', 'password1', 'password2']
 
 
 class UserLoginForm(forms.Form):
-    username = forms.CharField(widget=forms.TextInput())
-    password = forms.CharField(widget=forms.PasswordInput())
-
-    def __init__(self, *args, **kwargs):
-        super(UserLoginForm, self).__init__(*args, **kwargs)
+    email = forms.EmailField(
+        label='آدرس ایمیل',
+        widget=forms.TextInput(
+           attrs={'placeholder': 'آدرس ایمیل خود را وارد کنید'}
+            )
+        )
+    password = forms.CharField(
+        label='رمز عبور',
+        widget=forms.PasswordInput(
+            attrs={'placeholder': 'رمز عبور خود را وارد کنید'}
+            )
+        )
