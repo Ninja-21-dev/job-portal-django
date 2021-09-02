@@ -1,3 +1,10 @@
+* {
+  font-family: myFirstFont;
+}
+@font-face {
+  font-family: myFirstFont;
+  src: url(iranyekanwebmediumfanum.woff);
+}
 body {
     background: #fafafa;
     color: #333333;
