@@ -11,7 +11,9 @@ urlpatterns = [
     path('', include('portal.urls')),
     path('admin/', admin.site.urls),
     path('register/', user_views.jobseeker_register, name='register'),
-    path('employer/register/', user_views.employer_register, name='employer-register'),
+    path('employer/register/', user_views.employer_register,
+         name='employer-register'
+    ),
     path('login/', user_views.login_request, name='login'),
     
 ]
