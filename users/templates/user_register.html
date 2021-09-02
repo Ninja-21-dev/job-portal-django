@@ -5,16 +5,16 @@
         <form method="POST">
             {% csrf_token %}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Join Now!</legend>
+                <legend class="border-bottom mb-4">ثبت نام کارجو</legend>
                 {{ form|crispy }}
             </fieldset>
             <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Sign Up</button>
+                <button class="btn btn-outline-info" type="submit">ثبت نام</button>
             </div>
         </form>
         <div class="border-top pt-3">
             <small class="text-muted">
-                
+                کار فرما هستید؟ <a href="{% url 'employer-register' %}">ثبت نام کارفرما</a>
             </small>
         </div>
     </div>
