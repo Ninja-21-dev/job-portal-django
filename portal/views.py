@@ -1,49 +1,85 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
 from django.http import Http404
-from django.contrib.auth.decorators import login_required
 
-from users.models import JobSeeker
-from .forms import CompanyCreationForm
-from .models import Company
-
-
-@login_required
-def employer_home(request):
-    """ show list of requests by jobseekers on jobs created by employer"""     
-    if request.user.jobseeker.is_jobseeker:     
-            raise Http404
-    return render(request, 'employer/home.html')
+from employer.models import Job
+from .forms import UserRegisterForm, UserLoginForm
+from .models import JobSeeker, User
 
 
-@login_required
-def employer_profile(request):
-    """ 
-    create company profile by getting information from employer by
-    CompanyCreationForm from Company model.
-    """
-    if request.user.jobseeker.is_jobseeker:     
+def home_page(request):
+    jobs = Job.objects.all()
+    return render(request, 'home_page.html', {'jobs':jobs})
+
+
+def employer_register(request):
+    if request.user.is_authenticated:
             raise Http404
     if request.method == 'POST':
-        form = CompanyCreationForm(request.POST)
+        form = UserRegisterForm(request.POST)
         if form.is_valid():
-            instance = form.save(commit=False)
-            instance.employer = request.user
-            instance.save()
-    form = CompanyCreationForm()
-    return render(request, 'employer/profile.html', {'form':form})
+            data = form.cleaned_data
+            user = User.objects.create_user(
+                    data['email'],
+                    data['full_name'],
+                    data['password1'],
+                    )
+            role = JobSeeker(is_jobseeker=False, user=user)
+            role.save()
+            messages.success(
+                request, 'ثبت نام انجام شد - از طریق فرم زیر وارد شوید'
+                )
+            return redirect('login')
+    else:
+        form = UserRegisterForm()
+    return render(request, 'employer/register.html', {'form':form})
 
 
-@login_required
-def employer_jobs(request):
-    """ show all jobs published by the employer/company."""
-    if request.user.jobseeker.is_jobseeker:     
+def jobseeker_register(request):
+    if request.user.is_authenticated:
             raise Http404
-    return render(request, 'employer/jobs.html')
+    if request.method == 'POST':
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            user = User.objects.create_user(
+                    data['email'],
+                    data['full_name'],
+                    data['password1'],
+                    )
+            user.save()
+            role = JobSeeker(is_jobseeker=True, user=user)
+            role.save()
+            messages.success(
+                request, 'ثبت نام انجام شد - از طریق فرم زیر وارد شوید'
+                )
+            return redirect('login')
+    else:
+        form = UserRegisterForm()
+    return render(request, 'jobseeker/register.html', {'form':form})
 
 
-@login_required
-def employer_create_job(request):
-    """ create a job and publishe it to the portal"""
-    if request.user.jobseeker.is_jobseeker:     
-            raise Http404
-    return render(request, 'employer/create_job.html')
+def login_request(request):
+    if request.user.is_authenticated:
+        raise Http404
+    if request.method == 'POST':
+        form = UserLoginForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            user = authenticate(
+                request, email=data['email'], password=data['password']
+                )
+            if user is not None:
+                login(request, user)
+                # if user is jobseeker
+                if user.jobseeker.is_jobseeker:
+                    return redirect('jobseeker-home')
+                # if user is a employer
+                elif not user.jobseeker.is_jobseeker:
+                    return redirect('employer-home')
+            else:
+                messages.success(request, 'نام کاربری با رمز عبور صحیح نیست')
+                return redirect('login')
+    form = UserLoginForm()
+    return render(request, 'login.html', {'form':form})
