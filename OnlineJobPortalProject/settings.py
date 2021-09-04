@@ -26,8 +26,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'users.apps.UsersConfig',
     'portal.apps.PortalConfig',
+    'employer.apps.EmployerConfig',
     'crispy_forms',
 ]
 
@@ -76,7 +76,7 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
-AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'portal.User'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -99,7 +99,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tehran'
 
 USE_I18N = True
 
@@ -114,7 +114,10 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-
+# directory that we want to store uploaded files
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# url
+MEDIA_URL = '/media/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
