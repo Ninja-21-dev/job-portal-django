@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'portal.apps.PortalConfig',
     'employer.apps.EmployerConfig',
+    'jobseeker.apps.JobseekerConfig',
     'crispy_forms',
 ]
 
