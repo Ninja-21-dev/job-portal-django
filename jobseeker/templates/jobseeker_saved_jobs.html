@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+
+<legend class="mb-4">آگهی های نشان شده</legend>
+
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th scope="col">آگهی</th>
+        </tr>
+    </thead>
+    {% for job in jobs %}
+    <tbody>
+      <tr>
+          <td><a href="{% url 'job-detail' job.id %}">{{ job.job }}</a> </td>
+      </tr>
+    </tbody>
+    {% endfor %}
+  </table>
+
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+
+<legend class="mb-4">درخواست های ارسال شده شما</legend>
+
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th scope="col">آگهی</th>
+            <th scope="col">وضعیت</th>
+            <th scope="col">رزومه</th>
+        </tr>
+    </thead>
+    {% for request in requests %}
+    <tbody>
+      <tr>
+          <td>{{ request.job }}</td>
+        <td>{{ request.jobseeker }}</td>
+        <td><a target="_blank" href="{{ request.resume_url }}">مشاهده</a></td>
+      </tr>
+    </tbody>
+    {% endfor %}
+  </table>
+
+{% endblock %}
