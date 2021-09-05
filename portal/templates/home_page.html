@@ -3,12 +3,12 @@
 {% load humanize %}
 {% block content %}
 <div class="content-section">
-<legend class="mb-4">جدیدترین فرصت های شغلی</legend>
-{% for job in jobs %}
-<article class="media content-section">
-  <img class="account-img" src="{{ job.company.logo.url}}">
-  <div>
-      <span><a class="article-title" href="#">{{ job.title }}</a></span>
+  <legend class="mb-4">جدیدترین فرصت های شغلی</legend>
+  {% for job in jobs %}
+  <article class="media content-section">
+    <img class="account-img" src="{{ job.company.logo.url }}">
+    <div style="width: 100%;">
+      <span><a class="article-title" href="{% url 'job-detail' job.id %}">{{ job.title }}</a></span>
       <span class="text-muted mr-1" style="font-size: small;" >
         {% if job.created_date|naturalday == 'today' %}
         <td>(امروز)</td>
@@ -19,15 +19,22 @@
         {% endif %}
       </span><br>
       <i class="material-icons" style="vertical-align: middle;font-size: medium;">&#xe88a;</i>
-      <span style="vertical-align:middle;font-size:small;">{{ job.company.name }}</span><br>
+      <span style="vertical-align:middle;font-size:small;">{{ job.company }}</span><br>
       <i class="material-icons" style="vertical-align: middle;font-size: medium;">&#xe0c8;</i> 
       <span style="vertical-align:middle;font-size:small;">{{ job.location }} </span><br>
       <i class="material-icons" style="vertical-align: middle;font-size: medium;" >&#xe8f9;</i>
       <span style="vertical-align:middle;font-size:small;">{{ job.get_cooperation_type_display }}</span>
       <span  class="text-muted" style="font-size: small;vertical-align: middle;">(حقوق {{ job.get_salary_display }})</span>
       <br>
-  </div>
-</article>  
+    </div>
+    <div style="float: left;text-align: center;margin-top: 16px;vertical-align: middle;">
+      <a class="btn btn-outline-info" style="font-size: 12px;" href="{% url 'save-job' job.id %}">
+        <i class="material-icons" style="font-size: 20px;vertical-align: middle;">&#xe83a;</i>نشان کردن
+      </a><br>
+      <a style="margin-top: 5px;" class="btn btn-info" href="{% url 'request-job' job.id %}">ارسال رزومه</a>
+    </div>
+  </article>
+  
 {% endfor %}
 </div>
 {% endblock %}

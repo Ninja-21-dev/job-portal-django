@@ -1,13 +1,13 @@
 from datetime import datetime, timezone
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.http import Http404
 
 from employer.models import Job
 from .forms import UserRegisterForm, UserLoginForm
-from .models import JobSeeker, User
+from .models import UserType, User
 
 
 def home_page(request):
@@ -19,6 +19,11 @@ def home_page(request):
         if get_days.days > 1:
             i.created_date = f'{get_days.days} روز پیش' 
     return render(request, 'home_page.html', {'jobs':jobs})
+
+
+def job_detail(request, id):
+    job = get_object_or_404(Job, id=id)
+    return render(request, 'job_detail.html', {'job':job})
 
 
 def employer_register(request):
@@ -33,7 +38,7 @@ def employer_register(request):
                     data['full_name'],
                     data['password1'],
                     )
-            role = JobSeeker(is_jobseeker=False, user=user)
+            role = UserType(is_jobseeker=False, user=user)
             role.save()
             messages.success(
                 request, 'ثبت نام انجام شد - از طریق فرم زیر وارد شوید'
@@ -57,7 +62,7 @@ def jobseeker_register(request):
                     data['password1'],
                     )
             user.save()
-            role = JobSeeker(is_jobseeker=True, user=user)
+            role = UserType(is_jobseeker=True, user=user)
             role.save()
             messages.success(
                 request, 'ثبت نام انجام شد - از طریق فرم زیر وارد شوید'
@@ -81,10 +86,10 @@ def login_request(request):
             if user is not None:
                 login(request, user)
                 # if user is jobseeker
-                if user.jobseeker.is_jobseeker:
-                    return redirect('jobseeker-home')
+                if user.usertype.is_jobseeker:
+                    return redirect('home-page')
                 # if user is a employer
-                elif not user.jobseeker.is_jobseeker:
+                elif not user.usertype.is_jobseeker:
                     return redirect('employer-home')
             else:
                 messages.success(request, 'نام کاربری با رمز عبور صحیح نیست')

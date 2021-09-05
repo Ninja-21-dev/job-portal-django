@@ -30,7 +30,7 @@ class User(AbstractBaseUser):
         return self.is_admin
     
 
-class JobSeeker(models.Model):
+class UserType(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     is_jobseeker = models.BooleanField(default=True)
 

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+
+<article class="media content-section">
+    <img class="rounded-circle article-img" src="{{ job.company.logo.url }}">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2" href="#">{{ job.company }}</a>
+        <small class="text-muted"></small>
+      </div>
+      <h5 class="article-title">{{ job.title }}</h5>
+      <br>
+      موقعیت مکانی:
+      {{ job.location }}
+      &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;
+      دسته بندی : 
+      {{ job.category }}
+      <br>
+      سابقه کار:
+      {{ job.get_experience_display }}
+      &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;
+      حقوق:
+      {{ job.get_salary_display }}
+      <br>
+      نوع همکاری:
+      {{ job.get_cooperation_type_display }}
+      <legend >شرح موقعیت شغلی </legend>
+      <p class="article-content">{{ job.job_description }}</p>
+      <legend >معرفی شرکت</legend>
+      {{job.company.co_introduction}}
+      <hr>
+      مهارت های مورد نیاز:
+      {{ job.skills_required }}
+      <br>
+      وضعیت نظام وظیفه:
+      {{ job.get_military_service_display }}
+      <br>
+      تحصیلات:
+      {{ job.get_degree_display }}
+      <br>
+      جنسیت:
+      {{ job.get_gender_display }}
+    </div>      
+
+  </article>
+
+{% endblock %}
