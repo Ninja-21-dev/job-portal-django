@@ -1,8 +1,10 @@
+import datetime
+import humanize
+
+from PIL import Image
 from django.db import models
 from django.utils import timezone
 from django_jalali.db import models as jmodels
-
-from PIL import Image
 
 from portal.models import JobSeeker, User, Category
 
@@ -29,7 +31,7 @@ class Job(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     title = models.CharField(max_length=80)
     location = models.CharField(max_length=80)
-    created_date = models.DateTimeField(default=timezone.now)
+    created_date = models.DateTimeField(default=datetime.datetime.now(), blank=True)
     experience_choices = (
         ('no-matter','مهم نیست'),
         ('1-3', 'یک تا ۳ سال'),

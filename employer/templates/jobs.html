@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load humanize %}
 {% load crispy_forms_tags %}
 {% block content %}
 
@@ -19,7 +19,15 @@
         <tr>
           <td>{{job.title}}</td>
           <td>---</td>
-          <td>---</td>
+          {% if job.created_date|naturalday == 'today' %}
+          <td>امروز</td>
+          {% elif job.created_date|naturalday == 'yesterday' %}
+          <td>دیروز</td>
+          {% elif job.created_date|naturalday == 'tomorrow' %}
+          <td>فردا</td>
+          {% else %}
+          <td >{{ job.created_date|naturaltime }}</td>
+          {% endif %}
           <td>---</td>
         </tr>
       {% endfor %}

@@ -1,3 +1,5 @@
+from datetime import datetime, timezone
+
 from django.shortcuts import render, redirect
 from django.http import Http404
 from django.contrib.auth.decorators import login_required
@@ -91,6 +93,11 @@ def employer_jobs(request):
     """ show all jobs published by the employer/company."""
     try:
         jobs = request.user.company.jobs.all()
+        now = datetime.now(timezone.utc)
+        for i in jobs:
+            get_days = now - i.created_date
+            if get_days.days > 1:
+                i.created_date = f'{get_days.days} روز پیش' 
     except Company.DoesNotExist:
         return redirect('employer-home')
     return render(request, 'jobs.html', {'jobs':jobs})
