@@ -1,3 +1,5 @@
+from datetime import datetime, timezone
+
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
@@ -10,6 +12,12 @@ from .models import JobSeeker, User
 
 def home_page(request):
     jobs = Job.objects.all()
+    # convert time
+    now = datetime.now(timezone.utc)
+    for i in jobs:
+        get_days = now - i.created_date
+        if get_days.days > 1:
+            i.created_date = f'{get_days.days} روز پیش' 
     return render(request, 'home_page.html', {'jobs':jobs})
 
 

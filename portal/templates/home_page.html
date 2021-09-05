@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
+{% load humanize %}
 {% block content %}
 <div class="content-section">
 <legend class="mb-4">جدیدترین فرصت های شغلی</legend>
@@ -8,7 +9,15 @@
   <img class="account-img" src="{{ job.company.logo.url}}">
   <div>
       <span><a class="article-title" href="#">{{ job.title }}</a></span>
-      <span class="text-muted mr-1" style="font-size: small;" >(امروز)</span><br>
+      <span class="text-muted mr-1" style="font-size: small;" >
+        {% if job.created_date|naturalday == 'today' %}
+        <td>(امروز)</td>
+        {% elif job.created_date|naturalday == 'yesterday' %}
+        <td>(دیروز)</td>
+        {% else %}
+        <td >({{ job.created_date|naturaltime }})</td>
+        {% endif %}
+      </span><br>
       <i class="material-icons" style="vertical-align: middle;font-size: medium;">&#xe88a;</i>
       <span style="vertical-align:middle;font-size:small;">{{ job.company.name }}</span><br>
       <i class="material-icons" style="vertical-align: middle;font-size: medium;">&#xe0c8;</i> 
