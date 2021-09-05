@@ -11,7 +11,7 @@
         <th scope="col">عنوان آگهی</th>
         <th scope="col">وضعیت</th>
         <th scope="col">تاریخ ایجاد</th>
-        <th scope="col">تعداد درخواست برای این شغل</th>
+        <th scope="col">تعداد درخواست</th>
       </tr>
     </thead>
     <tbody>
@@ -28,7 +28,7 @@
           {% else %}
           <td >{{ job.created_date|naturaltime }}</td>
           {% endif %}
-          <td>---</td>
+          <td>{{ number }}</td>
         </tr>
       {% endfor %}
     </tbody>

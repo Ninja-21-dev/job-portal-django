@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<legend class="mb-4">درخواست های ارسال شده برای آگهی های شما</legend>
+
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th scope="col">کاربر</th>
+            <th scope="col">آگهی</th>
+            <th scope="col">رزومه</th>
+        </tr>
+    </thead>
+    {% for request in requests %}
+    <tbody>
+      <tr>
+        <td>{{ request.jobseeker }}</td>
+        <td>{{ request.job }}</td>
+        <td><a target="_blank" href="{{ request.resume_url }}">مشاهده</a></td>
+      </tr>
+    </tbody>
+    {% endfor %}
+  </table>
+
+{% endblock %}

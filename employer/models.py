@@ -6,7 +6,7 @@ from django.db import models
 from django.utils import timezone
 from django_jalali.db import models as jmodels
 
-from portal.models import JobSeeker, User, Category
+from portal.models import UserType, User, Category
 
 
 class Company(models.Model):
@@ -84,3 +84,16 @@ class Job(models.Model):
 
     def __str__(self):
         return self.title
+    
+    
+class JobRequests(models.Model):
+    employer = models.ForeignKey(Company, on_delete=models.CASCADE)
+    jobseeker = models.ForeignKey(User, on_delete=models.CASCADE)
+    job = models.OneToOneField(Job, on_delete=models.CASCADE)
+    resume_url = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return f'{self.jobseeker} requested on {self.job}'
+    
+    def save(self, *args, **kwargs):
+        super(JobRequests, self).save(*args, **kwargs)

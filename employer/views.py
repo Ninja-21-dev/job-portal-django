@@ -6,14 +6,13 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 
-from .models import JobSeeker
 from .forms import EmployerJobCreationForm, EmployerProfileForm
-from .models import Company
+from .models import Company, UserType, JobRequests
 
 
 def is_employer(user):
     try:
-        if user.jobseeker.is_jobseeker:
+        if user.usertype.is_jobseeker:
             raise Http404
         return True
     except:
@@ -31,12 +30,12 @@ def employer_home(request):
     in this case we redirect user to employer_profile() to make the profile.
     """     
     try:
-        request.user.company
+        requests = JobRequests.objects.filter(employer=request.user.company)
     except Company.DoesNotExist:
         messages.success(request, 'برای دسترسی به بخش های دیگر ابتدا اطلاعات زیر را تکمیل کنید')
         return redirect('employer-profile')
         
-    return render(request, 'home.html')
+    return render(request, 'employer_home.html', {'requests':requests, 'range':range(len(requests))})
 
 
 @user_passes_test(is_employer)
@@ -57,7 +56,7 @@ def employer_profile(request):
     try: # if user already has a profile show their information in form 
         if request.method == 'POST':
             form = EmployerProfileForm(
-                request.POST,request.FILES,instance=request.user.company
+                request.POST, request.FILES, instance=request.user.company
                 )
             if form.is_valid():
                 instance = form.save(commit=False)
@@ -98,9 +97,10 @@ def employer_jobs(request):
             get_days = now - i.created_date
             if get_days.days > 1:
                 i.created_date = f'{get_days.days} روز پیش' 
+        requests = JobRequests.objects.filter(employer=request.user.company)
     except Company.DoesNotExist:
         return redirect('employer-home')
-    return render(request, 'jobs.html', {'jobs':jobs})
+    return render(request, 'jobs.html', {'jobs':jobs, 'number':len(requests)})
 
 
 @user_passes_test(is_employer)
