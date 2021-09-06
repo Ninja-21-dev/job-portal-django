@@ -7,12 +7,12 @@ from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 
 from .forms import EmployerJobCreationForm, EmployerProfileForm
-from .models import Company, UserType, JobRequests
+from .models import Company, JobRequests
 
 
 def is_employer(user):
     try:
-        if user.usertype.is_jobseeker:
+        if user.is_jobseeker:
             raise Http404
         return True
     except:
@@ -30,12 +30,23 @@ def employer_home(request):
     in this case we redirect user to employer_profile() to make the profile.
     """     
     try:
-        requests = JobRequests.objects.filter(employer=request.user.company)
+        requests = JobRequests.objects.filter(
+            employer=request.user.company, accepted=False
+            ).all()
+        accepted_requests = JobRequests.objects.filter(
+            employer=request.user.company, accepted=True
+            ).all()
     except Company.DoesNotExist:
-        messages.success(request, 'برای دسترسی به بخش های دیگر ابتدا اطلاعات زیر را تکمیل کنید')
+        messages.success(
+            request,
+            'برای دسترسی به بخش های دیگر ابتدا اطلاعات زیر را تکمیل کنید'
+        )
         return redirect('employer-profile')
-        
-    return render(request, 'employer_home.html', {'requests':requests, 'range':range(len(requests))})
+    context = {
+        'requests':requests,
+        'accepted_requests': accepted_requests,
+        }
+    return render(request, 'employer_home.html', context)
 
 
 @user_passes_test(is_employer)
@@ -119,3 +130,25 @@ def employer_create_job(request):
     except Company.DoesNotExist:
         raise Http404
     return render(request, 'create_job.html', {'form':form})
+
+
+def accepted_status(request, id):
+    req = JobRequests.objects.filter(id=id).first()
+    req.accepted = True
+    req.save()
+    # also update the accepted status in jobseeker requests table
+    jobseeker_request = req.jobseeker.usertype.jobseekerprofile.requests.filter(id=id).first()
+    jobseeker_request.status = 'تایید شده'
+    jobseeker_request.save()
+    return redirect('employer-home')
+
+
+def hired_status(request, id):
+    req = JobRequests.objects.filter(id=id).first()
+    req.hired = True
+    return redirect('employer-home')
+
+
+def delete_request(request, id):
+    req = JobRequests.objects.filter(id=id).delete()
+    return redirect('employer-home')
