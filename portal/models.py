@@ -10,6 +10,7 @@ class User(AbstractBaseUser):
     
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+    is_jobseeker = models.BooleanField(default=True)
     
     objects = MyUserManager()
     
@@ -28,14 +29,6 @@ class User(AbstractBaseUser):
     @property
     def is_staff(self):
         return self.is_admin
-    
-
-class UserType(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    is_jobseeker = models.BooleanField(default=True)
-
-    def __str__(self):
-        return str(self.user)
 
 
 class Category(models.Model):
