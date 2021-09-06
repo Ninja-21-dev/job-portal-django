@@ -5,16 +5,16 @@ from portal.models import User
 
 
 class JobSeekerProfile(models.Model):
-    jobseeker = models.OneToOneField(User, on_delete=models.CASCADE)
-    resume = models.FileField()
+    jobseeker = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    resume = models.FileField(blank=True)
     
     def __str__(self):
         return f'{self.jobseeker} profile'
     
 
 class JobSeekerRequests(models.Model):
-    job = models.OneToOneField(Job, on_delete=models.CASCADE)
-    requests = models.ForeignKey(JobSeekerProfile, on_delete=models.CASCADE, related_name='requests')
+    requests = models.ForeignKey(User, on_delete=models.CASCADE, related_name='requests')
+    job = models.ForeignKey(Job, on_delete=models.CASCADE)
     
     def __str__(self):
         return f'{self.requests} requested on {self.job}'
@@ -24,11 +24,11 @@ class JobSeekerRequests(models.Model):
 
 
 class JobSeekerSaveJob(models.Model):
-    job = models.OneToOneField(Job, on_delete=models.CASCADE)
-    saved_job = models.ForeignKey(JobSeekerProfile, on_delete=models.CASCADE,  related_name='saved')
+    saved_job = models.ForeignKey(User, on_delete=models.CASCADE, related_name='saved_jobs')
+    job = models.ForeignKey(Job, on_delete=models.CASCADE)
     
     def __str__(self):
-        return f'{self.favorites} favorite'
+        return f'{self.saved_job}'
     
     def save(self, *args, **kwargs):
         super(JobSeekerSaveJob, self).save(*args, **kwargs)
