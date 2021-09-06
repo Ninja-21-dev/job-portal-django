@@ -15,4 +15,4 @@ class JobSeekerResumeForm(forms.ModelForm):
     
     class Meta:
         model = JobSeekerProfile
-        fields = ['resume']
+        fields = ['resume'] 

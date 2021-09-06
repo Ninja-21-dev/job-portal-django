@@ -1,7 +1,6 @@
 from django.contrib import admin
 
-from .models import UserType, User, Category
+from .models import User, Category
 
-admin.site.register(UserType)
 admin.site.register(User)
 admin.site.register(Category)

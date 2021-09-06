@@ -7,7 +7,7 @@ from django.http import Http404
 
 from employer.models import Job
 from .forms import UserRegisterForm, UserLoginForm
-from .models import UserType, User
+from .models import User
 
 
 def home_page(request):
@@ -37,12 +37,12 @@ def employer_register(request):
                     data['email'],
                     data['full_name'],
                     data['password1'],
-                    )
-            role = UserType(is_jobseeker=False, user=user)
-            role.save()
+            )
+            user.is_jobseeker = False
+            user.save()
             messages.success(
                 request, 'ثبت نام انجام شد - از طریق فرم زیر وارد شوید'
-                )
+            )
             return redirect('login')
     else:
         form = UserRegisterForm()
@@ -60,10 +60,8 @@ def jobseeker_register(request):
                     data['email'],
                     data['full_name'],
                     data['password1'],
-                    )
+            )
             user.save()
-            role = UserType(is_jobseeker=True, user=user)
-            role.save()
             messages.success(
                 request, 'ثبت نام انجام شد - از طریق فرم زیر وارد شوید'
                 )
@@ -86,10 +84,10 @@ def login_request(request):
             if user is not None:
                 login(request, user)
                 # if user is jobseeker
-                if user.usertype.is_jobseeker:
+                if user.is_jobseeker:
                     return redirect('home-page')
                 # if user is a employer
-                elif not user.usertype.is_jobseeker:
+                elif not user.is_jobseeker:
                     return redirect('employer-home')
             else:
                 messages.success(request, 'نام کاربری با رمز عبور صحیح نیست')

@@ -30,7 +30,7 @@
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
               {% if user.is_authenticated %}
-               {% if not user.usertype.is_jobseeker %}
+               {% if not user.is_jobseeker %}
                 {% if user.company.jobs %}
                   <a class="nav-item nav-link" href="{% url 'employer-jobs' %}">آگهی های من</a>
                   <a class="nav-item nav-link" href="{% url 'employer-create-job' %}">آگهی جدید</a>
@@ -41,7 +41,7 @@
                 <a class="nav-item nav-link" href="{% url 'logout' %}">خروج</a>
                 {% endif %}
                 {% endif %}
-                {% if user.usertype.is_jobseeker %}
+                {% if user.is_jobseeker %}
                 <a class="nav-item nav-link" href="{% url 'saved-jobs' %}">نشان شده ها</a>
                 <a class="nav-item nav-link" href="{% url 'jobseeker-requests' %}">درخواست های من</a>
                 <a class="nav-item nav-link" href="{% url 'jobseeker-profile' %}">پروفایل</a>
