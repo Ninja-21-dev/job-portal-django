@@ -1,28 +1,64 @@
 {% extends "base.html" %}
-
-{% load crispy_forms_tags %}
-
 {% block content %}
-
+<div class="content-section">
 <legend class="mb-4">درخواست های ارسال شده برای آگهی های شما</legend>
-
-<table class="table table-sm">
+<table class="table table-sm" style="text-align: center;">
     <thead>
         <tr>
             <th scope="col">کاربر</th>
             <th scope="col">آگهی</th>
             <th scope="col">رزومه</th>
+            <th></th>
+            <th></th>
         </tr>
     </thead>
     {% for request in requests %}
     <tbody>
       <tr>
         <td>{{ request.jobseeker }}</td>
-        <td>{{ request.job }}</td>
-        <td><a target="_blank" href="{{ request.resume_url }}">مشاهده</a></td>
+        <td><a href="{% url 'job-detail' request.job.id%}"> {{ request.job }}</a></td>
+        <td><a class="btn btn-outline-info" style="padding:2px;font-size:15px;" 
+          target="_blank" href="{{ request.resume_url }}">مشاهده</a>
+        </td>
+        <td style="float: left;">
+          <a class="btn btn-success" style="padding:2px;font-size:15px;"
+           href="{% url 'accept-status' request.id %}"> تایید</a>
+          <a class="btn btn-danger" style="padding:2px;font-size:15px;"
+           href="{% url 'delete-request' request.id %}">حذف</a>
+        </td> 
       </tr>
     </tbody>
     {% endfor %}
   </table>
+</div>
+<div class="content-section">
+  <legend class="mb-4">رزومه های تایید شده</legend>
+  <table class="table table-sm">
+    <thead>
+        <tr>
+            <th scope="col">کاربر</th>
+            <th scope="col">آگهی</th>
+            <th scope="col">رزومه</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+      {% for request in accepted_requests %}
+      <tr>
+        <td>{{ request.jobseeker }}</td>
+        <td><a href=""> </a>{{ request.job }}</td>
+        <td><a target="_blank" href="#">مشاهده</a></td>
+        <td style="float: left;">
+          <a class="btn btn-outline-success" style="padding:1px;font-size:12px;">استخدام شد </a>
+        </td>
+        <td>
+          <a  class="btn btn-danger" style="padding: 1px;font-size:12px;" href="#">حذف</a>
+        </td>
+      </tr>
+    </tbody>
+    {% endfor %}
 
+  </table>
+</div>
 {% endblock %}
