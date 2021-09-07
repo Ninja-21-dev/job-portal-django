@@ -16,7 +16,7 @@
     {% for request in requests %}
     <tbody>
       <tr>
-        <td>{{ request.job }}</td>
+        <td><a href="{% url 'job-detail' request.job.id %}">{{ request.job }}</a></td>
         <td>{{ request.status }}</td>
         <td><a target="_blank" href="{{ request.resume_url }}">مشاهده</a></td>
         <td><a class="btn btn-danger" style="padding: 1px;font-size:12px;" href="{% url 'cancel-request' request.id %}">لغو درخواست</a></td>

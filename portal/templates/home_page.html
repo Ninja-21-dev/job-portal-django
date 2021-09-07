@@ -29,12 +29,11 @@
     </div>
     <div style="float: left;text-align: center;margin-top: 16px;vertical-align: middle;">
       <a class="btn btn-outline-info" style="font-size: 12px;" href="{% url 'save-job' job.id %}">
-        <i class="material-icons" style="font-size: 20px;vertical-align: middle;">&#xe83a;</i>نشان کردن
+        <i class="material-icons" style="font-size: 20px;vertical-align: middle;font-size:18px;">&#xe83a;</i>نشان کردن
       </a><br>
       <a style="margin-top: 5px;" class="btn btn-info" href="{% url 'request-job' job.id %}">ارسال رزومه</a>
     </div>
   </article>
-  
 {% endfor %}
 </div>
 {% endblock %}

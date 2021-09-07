@@ -6,7 +6,7 @@ from portal.models import User
 
 class JobSeekerProfile(models.Model):
     jobseeker = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    resume = models.FileField(blank=True)
+    resume = models.FileField(null=True, upload_to='user_resume')
     
     def __str__(self):
         return f'{self.jobseeker} profile'
@@ -15,7 +15,8 @@ class JobSeekerProfile(models.Model):
 class JobSeekerRequests(models.Model):
     requests = models.ForeignKey(User, on_delete=models.CASCADE, related_name='requests')
     job = models.ForeignKey(Job, on_delete=models.CASCADE)
-    
+    status = models.CharField(max_length=80, default="در انتظار مشاهده کارفرما")    
+
     def __str__(self):
         return f'{self.requests} requested on {self.job}'
     

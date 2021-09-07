@@ -29,11 +29,20 @@ class UserRegisterForm(UserCreationForm):
             attrs={'placeholder': 'رمز عبور خود راتکرار کنید'}
             )
         )
+    
+    error_messages = {
+        'password_mismatch': "رمز عبور برابر نیست",
+    }
+    
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError("این ایمیل قبلا استفاده شده")
+        return email
 
     class Meta:
         model = User
         fields=['full_name', 'email', 'password1', 'password2']
-
 
 
 class UserLoginForm(forms.Form):
@@ -41,11 +50,11 @@ class UserLoginForm(forms.Form):
         label='آدرس ایمیل',
         widget=forms.EmailInput(
            attrs={'placeholder': 'آدرس ایمیل خود را وارد کنید'}
-            )
         )
+    )
     password = forms.CharField(
         label='رمز عبور',
         widget=forms.PasswordInput(
             attrs={'placeholder': 'رمز عبور خود را وارد کنید'}
-            )
         )
+    )

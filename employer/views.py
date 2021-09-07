@@ -124,7 +124,9 @@ def employer_create_job(request):
             if form.is_valid():
                 instance = form.save(commit=False)
                 instance.company = request.user.company
-                instance.save() 
+                instance.save()
+                messages.success(request, 'آگهی شما منتشر شد')
+                return redirect('job-detail', id=instance.id)
         elif request.method == 'GET':
             form = EmployerJobCreationForm()
     except Company.DoesNotExist:
@@ -137,7 +139,7 @@ def accepted_status(request, id):
     req.accepted = True
     req.save()
     # also update the accepted status in jobseeker requests table
-    jobseeker_request = req.jobseeker.usertype.jobseekerprofile.requests.filter(id=id).first()
+    jobseeker_request = req.jobseeker.requests.filter(id=id).first()
     jobseeker_request.status = 'تایید شده'
     jobseeker_request.save()
     return redirect('employer-home')

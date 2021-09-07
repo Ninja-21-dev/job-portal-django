@@ -6,8 +6,10 @@ from django.contrib import messages
 from django.http import Http404
 
 from employer.models import Job
+from jobseeker.models import JobSeekerRequests
 from .forms import UserRegisterForm, UserLoginForm
 from .models import User
+
 
 
 def home_page(request):
@@ -17,7 +19,7 @@ def home_page(request):
     for i in jobs:
         get_days = now - i.created_date
         if get_days.days > 1:
-            i.created_date = f'{get_days.days} روز پیش' 
+            i.created_date = f'{get_days.days} روز پیش'
     return render(request, 'home_page.html', {'jobs':jobs})
 
 

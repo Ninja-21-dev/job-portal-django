@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
@@ -52,19 +52,19 @@ def jobseeker_profile(request):
 @login_required
 @user_passes_test(is_jobseeker)
 def request_job(request, id):
-    if request.user.profile.requests.filter(job=id):
+    if request.user.requests.filter(job=id):
         messages.warning(
             request,
-            ' هم اکنون برای این آگهی رزومه ارسال کرده اید'
+            ' قبلا برای این آگهی رزومه ارسال کرده اید'
         )
         return redirect('home-page')
     if not request.user.profile.resume:
         messages.info(request, 'ابتدا رزومه ی خود را آپلود کنید')
         return redirect('jobseeker-profile')
-    job = Job.objects.filter(id=id).first()
+    job = get_object_or_404(Job, id=id)
     req = JobSeekerRequests(
         job=job,
-        requests=request.user.profile
+        requests=request.user
         )
     req.save()
     req_to_employer = JobRequests(
@@ -84,7 +84,7 @@ def jobseeker_requests(request):
     requests = request.user.requests.all()
     if not requests:
         messages.info(request, 'شما هنوز درخواستی ارسال نکرده اید')
-    return render(request, 'jobseeker_requests.html')
+    return render(request, 'jobseeker_requests.html', {'requests':requests})
 
 
 @login_required
@@ -93,10 +93,10 @@ def save_job(request, id):
     if request.user.saved_jobs.filter(job=id):
         messages.warning(request, 'این آگهی قبلا ذخیره شده')
         return redirect('home-page')
-    job = Job.objects.filter(id=id).first()
-    save_job = JobSeekerSaveJob(job=job, saved_job=request.user.profile)
+    job = get_object_or_404(Job, id=id)
+    save_job = JobSeekerSaveJob(job=job, saved_job=request.user)
     save_job.save()
-    messages.success(request, 'این آگهی ‌ذخیره شد')
+    messages.success(request, 'آگهی ‌ذخیره شد')
     return redirect('home-page')
 
 
@@ -104,7 +104,7 @@ def save_job(request, id):
 @user_passes_test(is_jobseeker)
 def jobseeker_saved_jobs(request):
     jobs = request.user.saved_jobs.all()
-    return render(request, 'jobseeker_saved_jobs.html')
+    return render(request, 'jobseeker_saved_jobs.html', {'jobs':jobs})
 
 
 def cancel_request(request, id):
