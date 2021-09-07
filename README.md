@@ -14,6 +14,6 @@
 ## Used:
 - python3
 - Django3.2.6
-- BootStrap 4
+- BootStrap4
 - SQlite datebase
 
