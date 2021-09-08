@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div class="content-section">
+  <legend >آگهی های شما </legend>
+  <table class="table">
+    <thead class="thead-light">
+      <tr>
+        <th scope="col">عنوان آگهی</th>
+        <th scope="col">وضعیت</th>
+        <th scope="col">تاریخ ایجاد</th>
+        <th scope="col">تعداد درخواست</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for job in jobs %}             
+        <tr>
+          <td>{{job.title}}</td>
+          <td>---</td>
+          {% if job.created_date|naturalday == 'today' %}
+          <td>امروز</td>
+          {% elif job.created_date|naturalday == 'yesterday' %}
+          <td>دیروز</td>
+          {% elif job.created_date|naturalday == 'tomorrow' %}
+          <td>فردا</td>
+          {% else %}
+          <td >{{ job.created_date|naturaltime }}</td>
+          {% endif %}
+          <td>{{ number }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}
