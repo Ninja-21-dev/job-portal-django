@@ -1,5 +1,6 @@
 # Online Job Portal
-
+Ability to register an advertisement for an employer and find a suitable job for a job seeker.
+written in Django.
 ## Run This App :
 1. clone the project
 2. go to project directory ``` cd OnlineJobPortal-Django ``` 
