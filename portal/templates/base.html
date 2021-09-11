@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <!-- my js -->
+  
   <!-- Blog CSS -->
   <link rel="stylesheet" type="text/css" href="{% static 'main.css' %}">
   <!-- google Icons -->
@@ -24,29 +26,34 @@
         <a class="navbar-brand mr-4" href="{% url 'home-page' %}">پرتال استخدام آنلاین جنگو</a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle"aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span></button>
-             <div class="collapse navbar-collapse" id="navbarToggle">
-            <div class="navbar-nav mr-auto">
-            </div>
+            <div class="collapse navbar-collapse" id="navbarToggle">
+              <div class="navbar-nav mr-auto">
+                <!-- search form -->
+                <form class="form-inline my-2 my-lg-0 ml-5" action="{% url 'search' %}">
+                  <button class="btn btn-info my-2 my-sm-0" type="submit">جستجو کن</button>
+                  <input name="q" data-filter="1" class="form-control mr-sm-1" type="search" placeholder="عنوان شغلی..." aria-label="Search">
+                </form>
+              </div>
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
               {% if user.is_authenticated %}
-               {% if not user.is_jobseeker %}
-                {% if user.company.jobs %}
-                  <a class="nav-item nav-link" href="{% url 'employer-jobs' %}">آگهی های من</a>
-                  <a class="nav-item nav-link" href="{% url 'employer-create-job' %}">آگهی جدید</a>
-                  <a class="nav-item nav-link" href="{% url 'employer-profile' %}">پروفایل</a>
-                  <a class="nav-item nav-link" href="{% url 'logout' %}">خروج</a>
-                {% else %}
-                <a class="nav-item nav-link" href="{% url 'employer-profile' %}">پروفایل</a>
-                <a class="nav-item nav-link" href="{% url 'logout' %}">خروج</a>
+                {% if not user.is_jobseeker %}
+                  {% if user.company.jobs %}
+                    <a class="nav-item nav-link" href="{% url 'employer-jobs' %}">آگهی های من</a>
+                    <a class="nav-item nav-link" href="{% url 'employer-create-job' %}">آگهی جدید</a>
+                    <a class="nav-item nav-link" href="{% url 'employer-profile' %}">پروفایل</a>
+                    <a class="nav-item nav-link" href="{% url 'logout' %}">خروج</a>
+                  {% else %}
+                    <a class="nav-item nav-link" href="{% url 'employer-profile' %}">پروفایل</a>
+                    <a class="nav-item nav-link" href="{% url 'logout' %}">خروج</a>
+                  {% endif %}
                 {% endif %}
-                {% endif %}
-                {% if user.is_jobseeker %}
+              {% if user.is_jobseeker %}
                 <a class="nav-item nav-link" href="{% url 'saved-jobs' %}">نشان شده ها</a>
                 <a class="nav-item nav-link" href="{% url 'jobseeker-requests' %}">درخواست های من</a>
                 <a class="nav-item nav-link" href="{% url 'jobseeker-profile' %}">پروفایل</a>
                 <a class="nav-item nav-link" href="{% url 'logout' %}">خروج</a>
-                {% endif %}
+              {% endif %}
               {% else %}
                 <a class="nav-item nav-link" href="{% url 'employer-register' %}">بخش کارفرمایان</a>
                 <a class="nav-item nav-link" href="{% url 'register' %}">ثبت نام کارجو</a>
@@ -54,12 +61,13 @@
               {% endif %}
             </div>
           </div>
+
         </div>
       </nav>
     </header>
     <main role="main" class="container">
         <div class="row">
-          <div class="col-md-8">
+          <div class="col-md-9">
             <!-- flash messages -->
             {% if messages %}
               {% for message in messages %}
@@ -70,16 +78,61 @@
             {% endif %}
             {% block content %}{% endblock %}
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3">
             <div class="content-section">
-              <h3></h3>
-              <p class='text-muted'>دسته بندی ها</p>
-                <ul class="list-group">
-                  <li class="list-group-item list-group-item-light">آخرین مقلات</li>
-                  <li class="list-group-item list-group-item-light">آخرین مقلات</li>
-                  <li class="list-group-item list-group-item-light">آخرین مقلات</li>
-                  <li class="list-group-item list-group-item-light">آخرین مقلات</li>
-                </ul>
+                <h6>
+                  <i class="material-icons ml-1" style="vertical-align: middle;">&#xe3c7;</i>دسته بندی ها
+                </h6>
+                {% for category in categories %}
+                <li class="list-group-item">
+                  <a href="{% url 'filter-by-category' category %}" style="color:grey;">
+                    <input type="checkbox" style="vertical-align: middle;">
+                    {{ category }}
+                  </a>
+                </li>
+              {% endfor %}
+                <h6 class="mt-3">
+                  <i class="material-icons mb-1 ml-1" style="vertical-align: middle;font-size: 20px;">&#xe0c8;</i>استان
+                </h6>
+                {% for category in categories %}
+                <li class="list-group-item">
+                  <a href="{% url 'filter-by-category' category %}" style="color:grey;">
+                    <input type="checkbox" style="vertical-align: middle;">
+                    {{ category }}
+                  </a>
+                </li>
+              {% endfor %}
+              <h6 class="mt-3">
+                <i class="material-icons mb-1 ml-1" style="vertical-align: middle;font-size: 20px;">&#xe8f9;</i>نوع قرار داد
+              </h6>
+              {% for category in categories %}
+              <li class="list-group-item">
+                <a href="{% url 'filter-by-category' category %}" style="color:grey;">
+                  <input type="checkbox" style="vertical-align: middle;">
+                  {{ category }}
+                </a>
+              </li>
+            {% endfor %}
+            <h6 class="mt-3">
+              <i class="material-icons mb-1 ml-1" style="vertical-align: middle;font-size: 20px;">&#xe416;</i>سابقه کار
+            </h6>
+            {% for category in categories %}
+            <li class="list-group-item">
+              <a href="{% url 'filter-by-category' category %}" style="color:grey;">
+                <input type="checkbox" style="vertical-align: middle;">{{ category }}
+              </a>
+            </li>
+          {% endfor %}
+          <h6 class="mt-3">
+            <i class="material-icons mb-1 ml-1" style="vertical-align: middle;font-size: 20px;">&#xe227;</i>حداقل حقوق
+          </h6>
+          {% for category in categories %}
+          <li class="list-group-item">
+            <a href="{% url 'filter-by-category' category %}" style="color:grey;">
+              <input type="checkbox" style="vertical-align: middle;">{{ category }}
+            </a>
+          </li>
+        {% endfor %}
             </div>
           </div>
         </div>

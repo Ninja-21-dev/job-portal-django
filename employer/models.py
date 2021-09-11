@@ -28,7 +28,7 @@ class Company(models.Model):
 
 class Job(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='jobs')
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='category')
     title = models.CharField(max_length=80)
     location = models.CharField(max_length=80)
     created_date = models.DateTimeField(default=datetime.datetime.now(), blank=True)

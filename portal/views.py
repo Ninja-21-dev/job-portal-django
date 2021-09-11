@@ -96,3 +96,14 @@ def login_request(request):
                 return redirect('login')
     form = UserLoginForm()
     return render(request, 'login.html', {'form':form})
+
+
+def search(request):
+    query = request.GET.get('q')
+    resaults =  Job.objects.filter(title__icontains=query).all()
+    return render(request, 'home_page.html', {'jobs':resaults})
+
+
+def filter_by_category(request, category):
+    resaults = Job.objects.filter(category__name=category).all()
+    return render(request, 'home_page.html', {'jobs':resaults})
