@@ -65,14 +65,14 @@ def request_job(request, id):
     req = JobSeekerRequests(
         job=job,
         requests=request.user
-        )
+    )
     req.save()
     req_to_employer = JobRequests(
         jobseeker=request.user,
         job=job,
         resume_url=request.user.profile.resume.url,
         employer=job.company,
-        )
+    )
     req_to_employer.save()
     messages.success(request, 'رزومه شما ارسال شد')
     return redirect('home-page')
@@ -108,8 +108,12 @@ def jobseeker_saved_jobs(request):
 
 
 def cancel_request(request, id):
+    jobseeker_req = request.user.requests.filter(id=id).first()
     #request sent to employer
-    employer_req = JobRequests.objects.filter(id=id).delete()
-    jobseeker_req = request.user.requests.filter(id=id).delete()
-    messages.success(request, 'درخواست شما لغو شد')
+    if jobseeker_req.status != 'تایید شده':
+        jobseeker_req = request.user.requests.filter(id=id).delete()
+        employer_req = JobRequests.objects.filter(id=id).delete()
+        messages.success(request, 'درخواست شما لغو شد')
+    else:
+        raise Http404
     return redirect('jobseeker-requests')
