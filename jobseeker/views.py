@@ -108,7 +108,7 @@ def jobseeker_saved_jobs(request):
 
 
 def cancel_request(request, id):
-    jobseeker_req = request.user.requests.filter(id=id).first()
+    jobseeker_req = get_object_or_404(request.user.requests, id=id)
     #request sent to employer
     if jobseeker_req.status != 'تایید شده':
         jobseeker_req = request.user.requests.filter(id=id).delete()
