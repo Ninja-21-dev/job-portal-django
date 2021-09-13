@@ -11,9 +11,8 @@ from .forms import UserRegisterForm, UserLoginForm
 from .models import User
 
 
-
 def home_page(request):
-    jobs = Job.objects.all()
+    jobs = Job.objects.order_by('-created_date').all()
     # convert time
     now = datetime.now(timezone.utc)
     for i in jobs:
