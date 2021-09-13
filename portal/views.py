@@ -66,7 +66,7 @@ def jobseeker_register(request):
             user.save()
             messages.success(
                 request, 'ثبت نام انجام شد - از طریق فرم زیر وارد شوید'
-                )
+            )
             return redirect('login')
     else:
         form = UserRegisterForm()
@@ -82,7 +82,7 @@ def login_request(request):
             data = form.cleaned_data
             user = authenticate(
                 request, email=data['email'], password=data['password']
-                )
+            )
             if user is not None:
                 login(request, user)
                 # if user is jobseeker
@@ -101,9 +101,19 @@ def login_request(request):
 def search(request):
     query = request.GET.get('q')
     resaults =  Job.objects.filter(title__icontains=query).all()
+    now = datetime.now(timezone.utc)
+    for i in resaults:
+        get_days = now - i.created_date
+        if get_days.days > 1:
+            i.created_date = f'{get_days.days} روز پیش'
     return render(request, 'home_page.html', {'jobs':resaults})
 
 
 def filter_by_category(request, category):
     resaults = Job.objects.filter(category__name=category).all()
+    now = datetime.now(timezone.utc)
+    for i in resaults:
+        get_days = now - i.created_date
+        if get_days.days > 1:
+            i.created_date = f'{get_days.days} روز پیش'
     return render(request, 'home_page.html', {'jobs':resaults})
