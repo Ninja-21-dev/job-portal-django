@@ -2,48 +2,59 @@
 {% block content %}
 
 <article class="media content-section">
-    <img class="rounded-circle article-img" src="{{ job.company.logo.url }}">
-    <div class="media-body">
-      <div class="article-metadata">
-        <a class="mr-2" href="#">{{ job.company }}</a>
-        <small class="text-muted"><a href="{{ job.company.link }}">{{ job.company.link }}</a></small>
+  <div class="media-body">
+    <img class="account-img" src="{{ job.company.logo.url }}">
+    <a style="font-size: 30px;"> شرکت {{ job.company }}</a>
+    <small class="text-muted"><a href="{{ job.company.link }}">(وبسایت)</a></small>
+    <div class="article-metadata mt-2">
       </div>
-      <h5 class="article-title">{{ job.title }}</h5>
-      <br>
-      موقعیت مکانی:
-      {{ job.location }}
-      &nbsp;&nbsp;&nbsp;
-      &nbsp;&nbsp;&nbsp;
-      دسته بندی : 
-      {{ job.category }}
-      <br>
-      سابقه کار:
-      {{ job.get_experience_display }}
-      &nbsp;&nbsp;&nbsp;
-      &nbsp;&nbsp;&nbsp;
-      حقوق:
-      {{ job.get_salary_display }}
-      <br>
-      نوع همکاری:
-      {{ job.get_cooperation_type_display }}
-      <legend >شرح موقعیت شغلی </legend>
-      <p class="article-content">{{ job.job_description }}</p>
-      <legend >معرفی شرکت</legend>
-      {{job.company.co_introduction}}
+      <h3 class="article-title mt-3">{{ job.title }}</h3  >
       <hr>
-      مهارت های مورد نیاز:
-      {{ job.skills_required }}
-      <br>
-      وضعیت نظام وظیفه:
+      موقعیت مکانی:
+      <span class="job-property ml-5">
+        {{ job.location }}
+      </span>
+      دسته بندی : 
+      <span class="job-property" >
+        {{ job.category }}
+      </span><br><br>
+      سابقه کار:
+      <span class="job-property ml-5" >
+        {{ job.get_experience_display }}
+      </span>
+      حقوق:
+      <span class="job-property ml-5" >
+      {{ job.get_salary_display }}
+      </span>
+      نوع همکاری:
+      <span class="job-property" >
+      {{ job.get_cooperation_type_display }}
+    </span>
+    <legend class="mt-5 mb-3" >شرح موقعیت شغلی </legend>
+      <p class="article-content">{{ job.job_description }}</p>
+    <legend class="mt-5 mb-3">معرفی شرکت</legend>
+      <p class="mb-5">{{job.company.co_introduction}}</p>
+    <p>
+    مهارت های مورد نیاز:
+    </p>
+    <span class="job-property ml-5">
+        {{ job.skills_required }}
+    </span>
+    <br>
+    <br>
+    وضعیت نظام وظیفه:
+    <span class="job-property ml-5">
       {{ job.get_military_service_display }}
-      <br>
-      تحصیلات:
+    </span>
+    تحصیلات:
+    <span class="job-property ml-5">
       {{ job.get_degree_display }}
-      <br>
-      جنسیت:
+    </span>
+    جنسیت:
+    <span class="job-property ">
       {{ job.get_gender_display }}
-    </div>      
-
-  </article>
+    </span>
+  </div>      
+</article>
 
 {% endblock %}

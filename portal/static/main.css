@@ -99,3 +99,11 @@ body {
   vertical-align:middle;
   font-size:small;
 }
+
+.job-property {
+  background-color: rgb(63, 63, 63);
+  color: white;
+  padding: 2px 5px;
+  border-radius: 5px;
+  font-size: 14px;
+}
